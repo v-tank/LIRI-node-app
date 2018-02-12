@@ -1,3 +1,4 @@
+// Variable to hold an object with all the required keys
 var keys = {
   consumer_key: '6TX8hQb4PnBytAfwxwGJn5QGc',
   consumer_secret: 'zUdXGC6dZo0rcQAXRFp9WMVDKiPPocgJ2SFkbPrcCHwmJDZloy',
@@ -8,4 +9,5 @@ var keys = {
   omdb_key: '40e9cece'
 }
 
+// Exports the keys to make them accessible in other files
 module.exports = keys;
