@@ -2,6 +2,7 @@ var keys = require("./keys.js");
 var Twitter = require('twitter');
 var request = require('request');
 var Spotify = require('node-spotify-api');
+var fs = require("fs");
 
 var command = process.argv[2];
 var arg = "";
@@ -27,6 +28,7 @@ switch (command) {
     movieInfo(arg);
     break;
   case "do-what-it-says":
+    doWhatItSays();
     break;
   default:
     console.log("You didn't enter the right command. Please try again.");
@@ -92,11 +94,18 @@ function spotifyThisSong(query) {
 }
 
 function movieInfo(movieName) {
+  if (!movieName) {
+    movieName = "Mr. Nobody";
+  } else {
+    movieName = movieName;
+  }
+  
   var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=" + keys.omdb_key;
 
   request(queryUrl, function(error, response, body) {
-
-    if (!error && response.statusCode === 200) {
+    if (error) {
+      console.log(error);
+    } else if (!error && response.statusCode === 200) {
       var title = JSON.parse(body)["Title"];
       var yearReleased = JSON.parse(body)["Year"];
       var imdbRating = JSON.parse(body)["imdbRating"];
@@ -116,11 +125,35 @@ function movieInfo(movieName) {
       console.log("Actors: " + actors);
       console.log("-----------------------------------------");
     }
-});
+  });
 }
 
 function doWhatItSays() {
 
+  fs.readFile("random.txt", "utf8", function(err, data) {
+    if (err) {
+      console.log(err);
+    } else {
+      var splitData = data.split(",");
+      console.log(splitData);
+
+      var todo = splitData[0];
+      // console.log("To Do: " +todo);
+      var queryString = splitData[1];
+
+      switch (todo) {
+      case "my-tweets":
+        showMyTweets();
+        break;
+      case "spotify-this-song":
+        spotifyThisSong(queryString);
+        break;
+      case "movie-this":
+        movieInfo(queryString);
+        break;
+      }
+    }
+  }); 
 }
 
 function appendToFile() {
