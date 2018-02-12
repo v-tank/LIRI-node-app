@@ -24,6 +24,7 @@ switch (command) {
     spotifyThisSong(arg);
     break;
   case "movie-this":
+    movieInfo(arg);
     break;
   case "do-what-it-says":
     break;
@@ -84,13 +85,38 @@ function spotifyThisSong(query) {
       console.log("Artist(s): " + artists);
       console.log("Album: " + albumName);
       console.log("Preview URL: " + previewURL);
+      console.log("-----------------------------------------");
       // data["tracks"]["items"][0]["album"]["artists"][0]["name"]
     }
   });
 }
 
 function movieInfo(movieName) {
+  var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=" + keys.omdb_key;
 
+  request(queryUrl, function(error, response, body) {
+
+    if (!error && response.statusCode === 200) {
+      var title = JSON.parse(body)["Title"];
+      var yearReleased = JSON.parse(body)["Year"];
+      var imdbRating = JSON.parse(body)["imdbRating"];
+      var rottenTomatoesRating = JSON.parse(body)["Ratings"][1]["Value"];
+      var country = JSON.parse(body)["Country"];
+      var language = JSON.parse(body)["Language"];
+      var plot = JSON.parse(body)["Plot"];
+      var actors = JSON.parse(body)["Actors"];
+
+      console.log("Title: " + title);
+      console.log("Year Released: " + yearReleased);
+      console.log("IMDb Rating: " + imdbRating);
+      console.log("Rotten Tomatoes Rating: " + rottenTomatoesRating);
+      console.log("Country: " + country);
+      console.log("Language: " + language);
+      console.log("Plot: " + plot);
+      console.log("Actors: " + actors);
+      console.log("-----------------------------------------");
+    }
+});
 }
 
 function doWhatItSays() {
