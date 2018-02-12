@@ -155,12 +155,12 @@ function movieInfo(movieName) {
 
 function doWhatItSays() {
 
-  fs.readFile("random.txt", "utf8", function(err, data) {
-    if (err) {
-      console.log(err);
+  fs.readFile("random.txt", "utf8", function(error, data) {
+    if (error) {
+      console.log(error);
     } else {
       var splitData = data.split(",");
-      console.log(splitData);
+      // console.log(splitData);
 
       var todo = splitData[0];
       // console.log("To Do: " +todo);
@@ -182,9 +182,12 @@ function doWhatItSays() {
 }
 
 function appendToFile(output) {
-  fs.appendFile("log.txt", output, function(err) {
-    if (err) {
-      return console.log(err);
+  fs.appendFile("log.txt", output, function(error) {
+    if (error) {
+      console.log(error);
+    }
+    else {
+      console.log("Data added to the log file.");
     }
   });
 }
