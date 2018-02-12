@@ -1,16 +1,27 @@
 var keys = require("./keys.js");
 var Twitter = require('twitter');
 var request = require('request');
+var Spotify = require('node-spotify-api');
 
 var command = process.argv[2];
-console.log(command);
+var arg = "";
+
+for (var i = 3; i < process.argv.length; i++) {
+  if (i > 3 && i < process.argv.length) {
+    arg = arg + "+" + process.argv[i];
+  }
+  else {
+    arg += process.argv[i];
+  }
+}
+
 
 switch (command) {
   case "my-tweets":
     showMyTweets();
     break;
   case "spotify-this-song":
-    spotifyThisSong();
+    spotifyThisSong(arg);
     break;
   case "movie-this":
     break;
@@ -45,21 +56,36 @@ function showMyTweets() {
 
 }
 
-function spotifyThisSong() {
-  var Spotify = require('node-spotify-api');
- 
+function spotifyThisSong(query) {
+   
   var spotify = new Spotify({
-    id: "f82a4a97b31c4127a8f0b0fc499be8ed",
-    secret: "d1f88afe80744d8ab842614731935745"
+    id: keys.spotify_id,
+    secret: keys.spotify_secret
   });
-    
-    spotify
-    .request('https://api.spotify.com/v1/tracks/7yCPwWs66K8Ba5lFuU2bcx')
-    .then(function(data) {
-        console.log(data); 
-    })
-    .catch(function(err) {
-        console.error('Error occurred: ' + err); 
+
+  if (!query) {
+    query = "The+Sign+Ace+Of+Base";
+  } else {
+    query = query;
+  }
+
+  // console.log(query);
+
+  spotify.search({ type: 'track', query: query, limit: 1 }, function(err, data) {
+    if (err) {
+      return console.log('Error occurred: ' + err);
+    }
+    else {
+      var trackName = data["tracks"]["items"][0]["name"];
+      var artists = data["tracks"]["items"][0]["artists"][0]["name"];
+      var previewURL = data["tracks"]["items"][0]["preview_url"];
+      var albumName = data["tracks"]["items"][0]["album"]["name"];
+      console.log("Song name: " + trackName);
+      console.log("Artist(s): " + artists);
+      console.log("Album: " + albumName);
+      console.log("Preview URL: " + previewURL);
+      // data["tracks"]["items"][0]["album"]["artists"][0]["name"]
+    }
   });
 }
 
