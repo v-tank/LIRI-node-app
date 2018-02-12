@@ -16,7 +16,6 @@ for (var i = 3; i < process.argv.length; i++) {
   }
 }
 
-
 switch (command) {
   case "my-tweets":
     showMyTweets();
@@ -48,12 +47,19 @@ function showMyTweets() {
   };
 
   client.get('statuses/user_timeline', params, function(error, tweets, response) {
-    if (!error) {
+    if (error) {
+      console.log(error);
+    } else {
       for (var i = 0; i < tweets.length; i++) {
         console.log("Created on: " + tweets[i]["created_at"]);
         console.log("Tweet: " + tweets[i]["text"]);
         console.log("-----------------------------------------");
       }
+
+      var output = 
+        `Displayed the latest 20 tweets from Mercury News.` + `\n` +
+        `-----------------------------------------` + `\n`;
+      appendToFile(output);
     }
   });
 
@@ -74,11 +80,10 @@ function spotifyThisSong(query) {
 
   // console.log(query);
 
-  spotify.search({ type: 'track', query: query, limit: 1 }, function(err, data) {
-    if (err) {
-      return console.log('Error occurred: ' + err);
-    }
-    else {
+  spotify.search({ type: 'track', query: query, limit: 1 }, function(error, data) {
+    if (error) {
+      console.log(error);
+    } else {
       var trackName = data["tracks"]["items"][0]["name"];
       var artists = data["tracks"]["items"][0]["artists"][0]["name"];
       var previewURL = data["tracks"]["items"][0]["preview_url"];
@@ -88,6 +93,14 @@ function spotifyThisSong(query) {
       console.log("Album: " + albumName);
       console.log("Preview URL: " + previewURL);
       console.log("-----------------------------------------");
+
+      var output = 
+        `Song Name: ` + trackName + `\n` +
+        `Artist(s): ` + artists + `\n` +
+        `Album: ` + albumName + `\n` +
+        `Preview URL: ` + previewURL + `\n` +
+        `-----------------------------------------` + `\n`;
+      appendToFile(output);
       // data["tracks"]["items"][0]["album"]["artists"][0]["name"]
     }
   });
@@ -95,11 +108,11 @@ function spotifyThisSong(query) {
 
 function movieInfo(movieName) {
   if (!movieName) {
-    movieName = "Mr. Nobody";
+    movieName = "Mr.+Nobody";
   } else {
     movieName = movieName;
   }
-  
+
   var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=" + keys.omdb_key;
 
   request(queryUrl, function(error, response, body) {
@@ -124,6 +137,18 @@ function movieInfo(movieName) {
       console.log("Plot: " + plot);
       console.log("Actors: " + actors);
       console.log("-----------------------------------------");
+
+      var output = 
+        `Title: ` + title + `\n` +
+        `Year Released: ` + yearReleased + `\n` +
+        `IMDb Rating: ` + imdbRating + `\n` +
+        `Rotten Tomatoes Rating: ` + rottenTomatoesRating + `\n` +
+        `Country: ` + country + `\n` +
+        `Language: ` + language + `\n` +
+        `Plot: ` + plot + `\n` +
+        `Actors: ` + actors + `\n` +
+        `-----------------------------------------` + `\n`;
+      appendToFile(output);
     }
   });
 }
@@ -156,6 +181,10 @@ function doWhatItSays() {
   }); 
 }
 
-function appendToFile() {
-
+function appendToFile(output) {
+  fs.appendFile("log.txt", output, function(err) {
+    if (err) {
+      return console.log(err);
+    }
+  });
 }
