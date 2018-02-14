@@ -75,9 +75,11 @@ function showMyTweets() {
         console.log("-----------------------------------------");
       }
 
+      var date = new Date();
+
       // Variable that holds info to display in the log.txt file.
       var output = 
-        `Displayed the latest 20 tweets from Mercury News.` + `\n` +
+        date + `: Fetched the latest 20 tweets from Mercury News.` + `\n` +
         `-----------------------------------------` + `\n`;
       
       // Calls function to append above variable to the log.txt file
@@ -122,12 +124,11 @@ function spotifyThisSong(query) {
       console.log("Preview URL: " + previewURL);
       console.log("-----------------------------------------");
 
+      var date = new Date();
+
       // Variable that holds info to display in the log.txt file.
       var output =
-        `Song Name: ` + trackName + `\n` +
-        `Artist(s): ` + artists + `\n` +
-        `Album: ` + albumName + `\n` +
-        `Preview URL: ` + previewURL + `\n` +
+        date + `: Fetched song '` + trackName + `' by ` + artists + ` from Spotify.\n` +
         `-----------------------------------------` + `\n`;
 
       // Calls function to append above variable to the log.txt file
@@ -176,16 +177,11 @@ function movieInfo(movieName) {
       console.log("Actors: " + actors);
       console.log("-----------------------------------------");
 
+      var date = new Date(); 
+
       // Variable that holds info to display in the log.txt file.
       var output = 
-        `Title: ` + title + `\n` +
-        `Year Released: ` + yearReleased + `\n` +
-        `IMDb Rating: ` + imdbRating + `\n` +
-        `Rotten Tomatoes Rating: ` + rottenTomatoesRating + `\n` +
-        `Country: ` + country + `\n` +
-        `Language: ` + language + `\n` +
-        `Plot: ` + plot + `\n` +
-        `Actors: ` + actors + `\n` +
+        date + `: Fetched movie '` + title + `' from OMDb.\n` +
         `-----------------------------------------` + `\n`;
 
       // Calls function to append above variable to the log.txt file
